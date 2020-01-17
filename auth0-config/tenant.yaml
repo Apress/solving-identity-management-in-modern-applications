@@ -1,0 +1,174 @@
+tenant:
+  friendly_name: modernidentity - Exported from Auth0 Explorer
+clients:
+  - is_token_endpoint_ip_header_trusted: false
+    name: Single Page App Client
+    is_first_party: true
+    oidc_conformant: true
+    allowed_clients: []
+    allowed_logout_urls:
+      - 'http://localhost:3000'
+    callbacks:
+      - 'http://localhost:3000/callback'
+    allowed_origins:
+      - 'http://localhost:3000'
+    jwt_configuration:
+      alg: RS256
+      lifetime_in_seconds: 36000
+      secret_encoded: false
+    token_endpoint_auth_method: none
+    app_type: spa
+    grant_types:
+      - authorization_code
+      - implicit
+      - refresh_token
+    web_origins:
+      - 'http://localhost:3000'
+  - is_token_endpoint_ip_header_trusted: false
+    name: Resource Server (Test Application)
+    is_first_party: true
+    oidc_conformant: true
+    jwt_configuration:
+      alg: RS256
+      lifetime_in_seconds: 36000
+      secret_encoded: false
+    app_type: non_interactive
+    grant_types:
+      - client_credentials
+  - is_token_endpoint_ip_header_trusted: false
+    name: Service Client
+    is_first_party: true
+    oidc_conformant: true
+    jwt_configuration:
+      alg: RS256
+      lifetime_in_seconds: 36000
+      secret_encoded: false
+    app_type: non_interactive
+    grant_types:
+      - client_credentials
+  - is_token_endpoint_ip_header_trusted: false
+    name: Cordova App
+    is_first_party: true
+    oidc_conformant: true
+    allowed_clients: []
+    allowed_logout_urls:
+      - >-
+        com.apress.mi.app://modernidentity.auth0.com/cordova/com.apress.mi.app/callback
+    callbacks:
+      - >-
+        com.apress.mi.app://modernidentity.auth0.com/cordova/com.apress.mi.app/callback
+    jwt_configuration:
+      alg: RS256
+      lifetime_in_seconds: 36000
+      secret_encoded: false
+    token_endpoint_auth_method: none
+    app_type: native
+    grant_types:
+      - authorization_code
+      - implicit
+      - refresh_token
+databases:
+  - options:
+      mfa:
+        active: true
+        return_enroll_settings: true
+      passwordPolicy: good
+      strategy_version: 2
+      brute_force_protection: true
+    strategy: auth0
+    name: Username-Password-Authentication
+    is_domain_connection: false
+    enabled_clients:
+      - Service Client
+      - Single Page App Client
+      - Cordova App
+      - Resource Server (Test Application)
+connections:
+  - options:
+      email: true
+      profile: true
+      scope:
+        - email
+        - profile
+      client_id: 837557402667-kf0jlmu853os1d8na5n19msv88hv9mbs.apps.googleusercontent.com
+      client_secret: BbjS11lUQiQx7AqLzze0IGj4
+      allowed_audiences: ''
+      contacts: false
+      blogger: false
+      calendar: false
+      gmail: false
+      google_plus: false
+      orkut: false
+      picasa_web: false
+      tasks: false
+      youtube: false
+      adsense_management: false
+      google_affiliate_network: false
+      analytics: false
+      google_books: false
+      google_cloud_storage: false
+      content_api_for_shopping: false
+      chrome_web_store: false
+      document_list: false
+      google_drive: false
+      google_drive_files: false
+      latitude_best: false
+      latitude_city: false
+      moderator: false
+      sites: false
+      spreadsheets: false
+      url_shortener: false
+      webmaster_tools: false
+      coordinate: false
+      coordinate_readonly: false
+      set_user_root_attributes: on_first_login
+    strategy: google-oauth2
+    name: google-oauth2
+    is_domain_connection: false
+    enabled_clients:
+      - Service Client
+      - Single Page App Client
+      - Cordova App
+      - Resource Server (Test Application)
+resourceServers:
+  - name: Resource Server
+    identifier: 'http://api.localhost'
+    allow_offline_access: false
+    skip_consent_for_verifiable_first_party_clients: true
+    token_lifetime: 86400
+    token_lifetime_for_web: 7200
+    signing_alg: RS256
+    scopes:
+      - value: 'read:articles'
+        description: Read posts
+      - value: 'write:article'
+        description: Write / Update Articles
+clientGrants:
+  - client_id: Resource Server (Test Application)
+    audience: 'http://api.localhost'
+    scope: []
+rules:
+  - enabled: true
+    script: |-
+      function addEmailToAccessToken(user, context, callback) {
+        // TODO: implement your rule
+        try {
+          context.accessToken["http://api.localhost/teamId"] = getDomain(user.email);
+          context.accessToken["http://api.localhost/email"] = user.email;
+          context.accessToken["http://api.localhost/email_verified"] = user.email_verified;
+        } catch (e) {
+          callback(e);
+          return;
+        }
+
+        function getDomain(email) {
+          if (!email) {
+            throw new UnauthorizedError("No Email Found");
+          }
+          return email.split('@')[1];
+        }
+
+        return callback(null, user, context);
+      }
+    name: Add Team to Access Token
+    order: 1
