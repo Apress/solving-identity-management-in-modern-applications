@@ -139,10 +139,20 @@ resourceServers:
     token_lifetime_for_web: 7200
     signing_alg: RS256
     scopes:
-      - value: 'read:articles'
-        description: Read posts
-      - value: 'write:article'
-        description: Write / Update Articles
+      - value: 'get:article'
+        description: Allows you to fetch articles
+      - value: 'patch:article'
+        description: Allows you to update or post an article
+      - value: 'post:article'
+        description: Allows you to post an article
+      - value: 'get:profile'
+        description: Allows you to fetch profile
+      - value: 'patch:profile'
+        description: Allows you to update profile
+      - value: 'put:grant'
+        description: Allows you to add grants
+      - value: 'delete:grant'
+        description: allows you to delete grants
 clientGrants:
   - client_id: Resource Server (Test Application)
     audience: 'http://api.localhost'
