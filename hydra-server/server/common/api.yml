@@ -6,16 +6,28 @@ info:
 servers:
   - url: /api/v1
 tags:
-  - name: Hydra Servr
+  - name: Hydra Server
     description: Example endpoints for Markdown Writer App
   - name: Specification
     description: The swagger API specification
 paths:
   /articles:
     post:
+      security: 
+        - {}
+        - OAuth2: ['post:article']
       tags:
         - Articles
       description: Create a new article
+      requestBody: 
+        content: 
+          application/json:
+            schema:
+              properties:
+                data: 
+                  type: string
+                  description: Request body data
+        required: true
       responses:
         200:
           description: Return a new article
@@ -26,77 +38,309 @@ paths:
                 items:
                   $ref: '#/components/schemas/Article'
         4XX:
-          description: Example not found
+          description: Bad Request, invalid data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401: 
+          description: Invalid Token or not authorized
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
         5XX:
-          description: Example not found
+          description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-    post:
-      tags:
-        - Examples
-      description: Create a new example
-      requestBody:
-        description: an example
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ExampleBody'
+
+  /articles/{articleId}/{articleVersion}:
+    parameters:
+      - in: path
         required: true
-      responses:
-        201:
-          description: Return the example with the specified id
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Example'
-        4XX:
-          description: Example not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        5XX:
-          description: Example not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /examples/{id}:
-    get:
+        name: articleId
+        schema:
+          type: string
+        description: The ID of the Article you are trying to access
+      - in: path
+        name: articleVersion
+        schema: 
+          type: number
+        required: true
+    
+    get: 
       tags:
-        - Examples
-      parameters:
-        - name: id
-          in: path
-          description: The id of the example to retrieve
-          required: true
-          schema:
-            type: integer
+        - Articles
+      description: Get an article specified by ID and Version
+      security: 
+        - {}
+        - OAuth2: ['get:article']
       responses:
         200:
-          description: Return the example with the specified id
-          content:
+          description: Requested article
+          content: 
             application/json:
-              schema:
-                $ref: '#/components/schemas/Example'
+              schema: 
+                $ref: "#/components/schemas/Article"
         4XX:
-          description: Example not found
+          description: "Error handling request"
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Error"
+        404:
+          description: Article not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        401: 
+          description: You do not have enough permissions to access this article
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    patch: 
+      tags: 
+        - Articles
+      description: Update an existing article, this will fork the article if you do not own it. However, If you do own it, an article with a new version umber will return
+      security: 
+        - {}
+        - OAuth2: ['patch:article']
+      requestBody: 
+        content: 
+          application/json:
+            schema:
+              properties:
+                data: 
+                  type: string
+                  description: Request body data, updates the article
+        required: true
+      responses:
+        200: 
+          description: Update Complete, you'll receive a new article
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Article"
+        404:
+          description: Article not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Insufficient permissions to update article
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
         5XX:
-          description: Example not found
+          description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+    
+  /articles/{articleId}/{articleVersion}/grants:
+    parameters:
+    - in: path
+      name: articleId
+      schema:
+        type: string
+      description: The ID of the Article you are trying to access
+      required: true
+    - in: path
+      name: articleVersion
+      schema: 
+        type: string
+      required: true
+    put: 
+      security: 
+        - {}
+        - OAuth2: ['put:grant']
+      description: Adds a grant
+      tags: 
+        - Articles
+      requestBody: 
+        content: 
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Grant"
+        required: true
+      responses:
+        200: 
+          description: Grant successfully added
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Article"
+        400: 
+          description: Invalid Request
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Error"
+        401: 
+          description: Not enough permissions, you do not have the permissions to grant access to this article
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Error"
+        404: 
+          description: Articl Not Found
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Error"
+        4XX: 
+          description: Request Error
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Error"
+        5XX: 
+          description: Internal Server Error
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Error"
+  /articles/{articleId}/{articleVersion}/grants/{identifier}:
+    parameters:
+    - in: path
+      name: articleId
+      schema:
+        type: string
+      description: The ID of the Article you are trying to access
+      required: true
+    - in: path
+      name: articleVersion
+      schema: 
+        type: string
+      required: true
+    - in: path
+      name: identifier
+      description: The identifier (username etc) for the grant to be revoked
+      schema: 
+        type: string
+      required: true
+    delete: 
+      tags: 
+        - Articles
+      security: 
+        - {}
+        - OAuth2: ['delete:grant']
+      responses:
+        200: 
+          description: Grant successfully added
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Article"
+        400: 
+          description: Invalid Request
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Error"
+        401: 
+          description: Not enough permissions, you do not have the permissions to grant access to this article
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Error"
+        404: 
+          description: Articl Not Found
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Error"
+        4XX: 
+          description: Request Error
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Error"
+        5XX: 
+          description: Internal Server Error
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Error"
+  /user:
+    get:
+      tags:
+        - User
+      security: 
+        - OAuth2: ['get:profile']
+      description: Gets currently logged in user
+      responses:
+        200:
+          description: currently logged in user
+          content: 
+            application/json: 
+              schema: 
+                $ref: "#/components/schemas/User"
+        401:
+          description: You are not authorized
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Error"
+        5XX:
+          description: Internal Server Error
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Error"
+    patch:
+      tags:
+        - User
+      security: 
+        - OAuth2: ['patch:profile']
+      description: Gets currently logged in user
+      requestBody:
+        content: 
+          application/json:
+           schema:
+             $ref: "#/components/schemas/User"
+        required: true
+      responses:
+        200:
+          description: currently logged in user
+          content: 
+            application/json: 
+              schema: 
+                $ref: "#/components/schemas/User"
+        401:
+          description: You are not authorized
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Error"
+        5XX:
+          description: Internal Server Error
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Error"
+
   /spec:
     get:
       tags:
@@ -106,6 +350,24 @@ paths:
           description: Return the API specification
           content: {}
 components:
+  securitySchemes:
+    OpenID:
+      type: openIdConnect
+      openIdConnectUrl: 'https://yourdomain.auth0.com/.well-known/openid-configuration'
+    OAuth2: 
+      type: oauth2
+      flows: 
+        authorizationCode:
+          authorizationUrl: 'https://yourdomain.auth0.com/authorize'
+          tokenUrl: 'https://yourdomain.auth0.com/oauth/token'
+          scopes: 
+            'get:article': Allows you to fetch articles
+            'patch:article':  Allows you to update or post an article
+            'post:article':  Allows you to post an article  
+            'get:profile':  Allows you to fetch profile  
+            'patch:profile':  Allows you to update profile  
+            'put:grant':  Allows you to add grants  
+            'delete:grant':  allows you to delete grants
   schemas:
     Article:
       type: object
@@ -118,9 +380,14 @@ components:
           example: '#hello world'
         owner:
           type: string
-          example: foo|bar
+          example: 'foo|barid020340'
+        version: 
+          type: number
+          example: 43
         grants: 
-          $ref: '#/components/schema/Grant'
+          type: array
+          items: 
+            $ref: '#/components/schemas/Grant'
     Grant:
       type: object
       properties:
@@ -130,11 +397,40 @@ components:
         permissions:
           type: array
           items: 
-            type: string 
+            type: "string"
+            enum: ['read', 'write', 'share', 'owner']
+              
     Error:
       type: object
+      properties:
+        code: 
+          type: number
+          example: 404
+          description: HTTP Status code of error
+        message: 
+          type: string
+          example: Not found
+          description: Full detailed description of error
       additionalProperties: true
 
     User:
       type: object
+      properties:
+        given_name: 
+          type: string
+          example: John
+          description: Given Name of the user
+        family_name: 
+          type: string
+          example: Doe
+          description: Family Name of the user
+        nickname: 
+          type: string
+          example: johndoe
+          description: Shortname/Nickname of the user
+        picture: 
+          type: string
+          example: 'example.org/foo.jpg'
+          description: URL to picture of the user
+
       additionalProperties: true

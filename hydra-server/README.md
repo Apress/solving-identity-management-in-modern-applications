@@ -1,6 +1,15 @@
 # hydra-server
 
-Sample Resource Server for Modern Identity book, this application is inteded for demonstration purposes for the concepts shared in the book as such does not follow all the best practices, for the sake of brevity. 
+Sample Resource Server for Modern Identity book, this application is inteded for demonstration purposes for the concepts shared in the book as such does not follow all the best practices, for the sake of brevity.
+
+This project was bootstrapped using [Express No Stress Generator](https://github.com/cdimascio/generator-express-no-stress)
+
+## Notes
+
+Please note that in order to keep the scope simple, there is no persistence for 
+articles and grant data. They are stored purely in memory and thus resetting the 
+container or the runtime will clean any originally stored data. 
+
 
 ## Get Started
 
@@ -62,14 +71,6 @@ or debug them
 npm run test:debug
 ```
 
-## Try It
-* Open you're browser to [http://localhost:3000](http://localhost:3000)
-* Invoke the `/examples` endpoint 
-  ```shell
-  curl http://localhost:3000/api/v1/examples
-  ```
-
-
 ## Debug It
 
 #### Debug the server:
@@ -91,23 +92,12 @@ Add these [contents](https://github.com/cdimascio/generator-express-no-stress/bl
 
 View prettier linter output
 
-```
+```bash
 npm run lint
 ```
 
 Fix all prettier linter errors
 
-```
+```bash
 npm run lint
 ```
-
-## Deploy It
-
-Deploy to CloudFoundry
-
-```shell
-cf push hydra-server
-```
-
-
-   
