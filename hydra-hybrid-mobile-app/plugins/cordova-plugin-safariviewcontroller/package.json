@@ -1,0 +1,67 @@
+{
+  "_from": "cordova-plugin-safariviewcontroller",
+  "_id": "cordova-plugin-safariviewcontroller@1.6.0",
+  "_inBundle": false,
+  "_integrity": "sha512-TSrVTTdIjCb1iK+FT0GSnfVhmEY5oRzB2yhlwSnxgwxhTrFHDnfTXrX4KKHWaszxGnMKNFuUFTv8K+fc0GNqEg==",
+  "_location": "/cordova-plugin-safariviewcontroller",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "cordova-plugin-safariviewcontroller",
+    "name": "cordova-plugin-safariviewcontroller",
+    "escapedName": "cordova-plugin-safariviewcontroller",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-safariviewcontroller/-/cordova-plugin-safariviewcontroller-1.6.0.tgz",
+  "_shasum": "7a86c28e946d52eddd662cfa0c9a7b2247cdc675",
+  "_spec": "cordova-plugin-safariviewcontroller",
+  "_where": "/Users/abhishekhingnikar/work/hydra/hydra-hybrid-mobile-app",
+  "author": {
+    "name": "Eddy Verbruggen",
+    "email": "eddyverbruggen@gmail.com",
+    "url": "https://github.com/EddyVerbruggen"
+  },
+  "bugs": {
+    "url": "https://github.com/EddyVerbruggen/cordova-plugin-safariviewcontroller/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "cordova-plugin-safariviewcontroller",
+    "platforms": [
+      "ios"
+    ]
+  },
+  "deprecated": false,
+  "description": "Forget InAppBrowser for iOS - this is way better for displaying read-only web content in your PhoneGap app.",
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "homepage": "https://github.com/EddyVerbruggen/cordova-plugin-safariviewcontroller#readme",
+  "keywords": [
+    "InAppBrowser",
+    "InAppSafariBrowser",
+    "Safari",
+    "Safari ViewController",
+    "Chrome Custom Tabs",
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android"
+  ],
+  "license": "MIT",
+  "name": "cordova-plugin-safariviewcontroller",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EddyVerbruggen/cordova-plugin-safariviewcontroller.git"
+  },
+  "version": "1.6.0"
+}

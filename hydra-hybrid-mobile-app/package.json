@@ -1,0 +1,33 @@
+{
+    "name": "com.apress.mi.app",
+    "displayName": "Hydra",
+    "version": "1.0.0",
+    "description": "A sample Apache Cordova application that responds to the deviceready event.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "ecosystem:cordova"
+    ],
+    "author": "Apache Cordova Team",
+    "license": "Apache-2.0",
+    "dependencies": {
+        "@auth0/cordova": "0.4.1",
+        "cordova-plugin-customurlscheme": "^5.0.0",
+        "cordova-plugin-safariviewcontroller": "^1.6.0",
+        "cordova-plugin-secure-storage": "^3.0.2"
+    },
+    "cordova": {
+        "plugins": {
+            "cordova-plugin-safariviewcontroller": {},
+            "cordova-plugin-secure-storage": {},
+            "cordova-plugin-customurlscheme": {
+                "URL_SCHEME": "com.apress.mi.app",
+                "ANDROID_SCHEME": "com.apress.mi.app",
+                "ANDROID_HOST": "modernidentity.auth0.com",
+                "ANDROID_PATHPREFIX": "/cordova/com.apress.mi.app/callback"
+            }
+        }
+    }
+}

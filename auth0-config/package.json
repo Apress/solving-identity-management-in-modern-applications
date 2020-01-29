@@ -1,0 +1,15 @@
+{
+  "name": "auth0-config",
+  "version": "1.0.0",
+  "description": "Auth0 Config for the Example Application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "a0deploy import -c config.json -i tenant.yaml"
+  },
+  "author": "Abhishek Hingnikar",
+  "license": "MIT",
+  "dependencies": {
+    "auth0-deploy-cli": "^3.6.7"
+  }
+}
