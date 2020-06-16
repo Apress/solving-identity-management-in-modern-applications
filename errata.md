@@ -8,6 +8,12 @@ The cover should have acknowledged:  **“With code by Abhishek Hingnikar”**.
 
 ***
 
+On **page xxii** Updated acknowledgement for use of identicons
+
+The acknowledgements on page xxii should have included our gratitude to Vittorio Bertocci, Guillermo Mesyngier and the Auth0 graphics team for the identicon project to create a visual language for identity.  The Login credentials, ID Token, Access Token, Refresh Token, and Cookie icons used in the diagrams are from https://identicons.dev/ and used subject to MIT License, a copy of which is in the github repo for this book.
+
+***
+
 On **page 135** Updated description of how email addresses for permissions are handled:
  
 On page 135 of the paperback edition, the statement, “In the interest of privacy, instead of sharing the full email, a salted hash is stored and acquired” should read: **“In the interest of privacy, instead of sharing the full email with each user accessing the file, only the owner has access to the whole list of permissions”**
